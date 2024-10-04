@@ -29,11 +29,15 @@ const CreateUserModal = ({ setUsers }) => {
 		role: "",
 		description: "",
 		gender: "",
+		Email: "",
+		IgUn: "",
+		fbUn: "",
+		phone: "",
 	});
 	const toast = useToast();
 
 	const handleCreateUser = async (e) => {
-		e.preventDefault(); // prevent page refresh
+		//e.preventDefault(); // prevent page refresh
 		setIsLoading(true);
 		try {
 			const res = await fetch(BASE_URL + "/friends", {
@@ -54,17 +58,22 @@ const CreateUserModal = ({ setUsers }) => {
 				title: "Yayy! 🎉",
 				description: "Friend created successfully.",
 				duration: 2000,
-				position: "top-center",
+				position: "top",
 			});
 			onClose();
 			setUsers((prevUsers) => [...prevUsers, data]);
 
+			// Clear the input fields
 			setInputs({
 				name: "",
 				role: "",
 				description: "",
 				gender: "",
-			}); // clear inputs
+				Email: "",
+				IgUn: "",
+				fbUn: "",
+				phone: "",
+			});
 		} catch (error) {
 			toast({
 				status: "error",
@@ -79,7 +88,7 @@ const CreateUserModal = ({ setUsers }) => {
 
 	return (
 		<>
-			<Button onClick={onOpen}>
+			<Button onClick={onOpen} colorScheme="blue">
 				<BiAddToQueue size={20} />
 			</Button>
 
@@ -87,53 +96,82 @@ const CreateUserModal = ({ setUsers }) => {
 				<ModalOverlay />
 				<form onSubmit={handleCreateUser}>
 					<ModalContent>
-						<ModalHeader> My new BFF 😍 </ModalHeader>
+						<ModalHeader>Add a New Friend</ModalHeader>
 						<ModalCloseButton />
+						<ModalBody>
+							<FormControl>
+								<FormLabel>Full Name</FormLabel>
+								<Input
+									placeholder="John Doe"
+									value={inputs.name}
+									onChange={(e) => setInputs({ ...inputs, name: e.target.value })}
+								/>
+							</FormControl>
 
-						<ModalBody pb={6}>
-							<Flex alignItems={"center"} gap={4}>
-								{/* Left */}
-								<FormControl>
-									<FormLabel>Full Name</FormLabel>
-									<Input
-										placeholder='John Doe'
-										value={inputs.name}
-										onChange={(e) => setInputs({ ...inputs, name: e.target.value })}
-									/>
-								</FormControl>
-
-								{/* Right */}
-								<FormControl>
-									<FormLabel>Role</FormLabel>
-									<Input
-										placeholder='Software Engineer'
-										value={inputs.role}
-										onChange={(e) => setInputs({ ...inputs, role: e.target.value })}
-									/>
-								</FormControl>
-							</Flex>
+							<FormControl mt={4}>
+								<FormLabel>Role</FormLabel>
+								<Input
+									placeholder="Software Engineer"
+									value={inputs.role}
+									onChange={(e) => setInputs({ ...inputs, role: e.target.value })}
+								/>
+							</FormControl>
 
 							<FormControl mt={4}>
 								<FormLabel>Description</FormLabel>
 								<Textarea
-									resize={"none"}
-									overflowY={"hidden"}
-									placeholder="He's a software engineer who loves to code and build things."
+									placeholder="Describe the friend..."
 									value={inputs.description}
 									onChange={(e) => setInputs({ ...inputs, description: e.target.value })}
+								/>
+							</FormControl>
+
+							<FormControl mt={4}>
+								<FormLabel>Email</FormLabel>
+								<Input
+									placeholder="example@gmail.com"
+									value={inputs.Email}
+									onChange={(e) => setInputs({ ...inputs, Email: e.target.value })}
+								/>
+							</FormControl>
+
+							<FormControl mt={4}>
+								<FormLabel>Instagram Username</FormLabel>
+								<Input
+									placeholder="ig_username"
+									value={inputs.IgUn}
+									onChange={(e) => setInputs({ ...inputs, IgUn: e.target.value })}
+								/>
+							</FormControl>
+
+							<FormControl mt={4}>
+								<FormLabel>Facebook Username</FormLabel>
+								<Input
+									placeholder="fb_username"
+									value={inputs.fbUn}
+									onChange={(e) => setInputs({ ...inputs, fbUn: e.target.value })}
+								/>
+							</FormControl>
+
+							<FormControl mt={4}>
+								<FormLabel>Phone</FormLabel>
+								<Input
+									placeholder="+1234567890"
+									value={inputs.phone}
+									onChange={(e) => setInputs({ ...inputs, phone: e.target.value })}
 								/>
 							</FormControl>
 
 							<RadioGroup mt={4}>
 								<Flex gap={5}>
 									<Radio
-										value='male'
+										value="male"
 										onChange={(e) => setInputs({ ...inputs, gender: e.target.value })}
 									>
 										Male
 									</Radio>
 									<Radio
-										value='female'
+										value="female"
 										onChange={(e) => setInputs({ ...inputs, gender: e.target.value })}
 									>
 										Female
@@ -143,8 +181,8 @@ const CreateUserModal = ({ setUsers }) => {
 						</ModalBody>
 
 						<ModalFooter>
-							<Button colorScheme='blue' mr={3} type='submit' isLoading={isLoading}>
-								Add
+							<Button colorScheme="blue" mr={3} type="submit" isLoading={isLoading}>
+								Add Friend
 							</Button>
 							<Button onClick={onClose}>Cancel</Button>
 						</ModalFooter>
@@ -154,4 +192,5 @@ const CreateUserModal = ({ setUsers }) => {
 		</>
 	);
 };
+
 export default CreateUserModal;

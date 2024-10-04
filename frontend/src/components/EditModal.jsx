@@ -27,11 +27,16 @@ function EditModal({ setUsers, user }) {
 		name: user.name,
 		role: user.role,
 		description: user.description,
+		Email: user.Email,
+		IgUn: user.Ig_un,
+		fbUn: user.fb_un,
+		phone: user.phone,
 	});
 	const toast = useToast();
 
+	// Handle form submission to edit the user
 	const handleEditUser = async (e) => {
-		e.preventDefault();
+		//e.preventDefault();
 		setIsLoading(true);
 		try {
 			const res = await fetch(BASE_URL + "/friends/" + user.id, {
@@ -45,26 +50,34 @@ function EditModal({ setUsers, user }) {
 			if (!res.ok) {
 				throw new Error(data.error);
 			}
-			setUsers((prevUsers) => prevUsers.map((u) => (u.id === user.id ? data : u)));
+			// Update the user in the list
+			setUsers((prevUsers) =>
+				prevUsers.map((u) => (u.id === user.id ? data : u))
+			);
 			toast({
 				status: "success",
-				title: "Yayy! 🎉",
-				description: "Friend updated successfully.",
+				title: "Friend updated successfully!",
 				duration: 2000,
-				position: "top-center",
+				position: "top",
 			});
 			onClose();
 		} catch (error) {
 			toast({
 				status: "error",
-				title: "An error occurred.",
+				title: "Error",
 				description: error.message,
 				duration: 4000,
-				position: "top-center",
+				position: "top",
 			});
 		} finally {
 			setIsLoading(false);
 		}
+	};
+
+	// Handle input changes
+	const handleChange = (e) => {
+		const { name, value } = e.target;
+		setInputs((prev) => ({ ...prev, [name]: value }));
 	};
 
 	return (
@@ -73,7 +86,7 @@ function EditModal({ setUsers, user }) {
 				onClick={onOpen}
 				variant='ghost'
 				colorScheme='blue'
-				aria-label='See menu'
+				aria-label='Edit user'
 				size={"sm"}
 				icon={<BiEditAlt size={20} />}
 			/>
@@ -82,42 +95,97 @@ function EditModal({ setUsers, user }) {
 				<ModalOverlay />
 				<form onSubmit={handleEditUser}>
 					<ModalContent>
-						<ModalHeader>My new BFF 😍</ModalHeader>
+						<ModalHeader>Edit Friend</ModalHeader>
 						<ModalCloseButton />
 						<ModalBody pb={6}>
+							{/* Name and Role */}
 							<Flex alignItems={"center"} gap={4}>
 								<FormControl>
 									<FormLabel>Full Name</FormLabel>
 									<Input
-										placeholder='John Doe'
+										name="name"
+										placeholder="John Doe"
 										value={inputs.name}
-										onChange={(e) => setInputs((prev) => ({ ...prev, name: e.target.value }))}
+										onChange={handleChange}
 									/>
 								</FormControl>
 
 								<FormControl>
 									<FormLabel>Role</FormLabel>
 									<Input
-										placeholder='Software Engineer'
+										name="role"
+										placeholder="Software Engineer"
 										value={inputs.role}
-										onChange={(e) => setInputs((prev) => ({ ...prev, role: e.target.value }))}
+										onChange={handleChange}
 									/>
 								</FormControl>
 							</Flex>
+
+							{/* Description */}
 							<FormControl mt={4}>
 								<FormLabel>Description</FormLabel>
 								<Textarea
+									name="description"
 									resize={"none"}
-									overflowY={"hidden"}
-									placeholder="He's a software engineer who loves to code and build things."
+									placeholder="Enter a description"
 									value={inputs.description}
-									onChange={(e) => setInputs((prev) => ({ ...prev, description: e.target.value }))}
+									onChange={handleChange}
+								/>
+							</FormControl>
+
+							{/* Email */}
+							<FormControl mt={4}>
+								<FormLabel>Email</FormLabel>
+								<Input
+									name="Email"
+									placeholder="example@gmail.com"
+									value={inputs.Email}
+									onChange={handleChange}
+								/>
+							</FormControl>
+
+							{/* Instagram Username */}
+							<FormControl mt={4}>
+								<FormLabel>Instagram Username</FormLabel>
+								<Input
+									name="IgUn"
+									placeholder="ig_username"
+									value={inputs.IgUn}
+									onChange={handleChange}
+								/>
+							</FormControl>
+
+							{/* Facebook Username */}
+							<FormControl mt={4}>
+								<FormLabel>Facebook Username</FormLabel>
+								<Input
+									name="fbUn"
+									placeholder="fb_username"
+									value={inputs.fbUn}
+									onChange={handleChange}
+								/>
+							</FormControl>
+
+							{/* Phone */}
+							<FormControl mt={4}>
+								<FormLabel>Phone</FormLabel>
+								<Input
+									name="phone"
+									placeholder="Enter phone number"
+									value={inputs.phone}
+									onChange={handleChange}
 								/>
 							</FormControl>
 						</ModalBody>
 
+						{/* Modal Footer with Update and Cancel Buttons */}
 						<ModalFooter>
-							<Button colorScheme='blue' mr={3} type='submit' isLoading={isLoading}>
+							<Button
+								colorScheme='blue'
+								type='submit'
+								isLoading={isLoading}
+								mr={3}
+							>
 								Update
 							</Button>
 							<Button onClick={onClose}>Cancel</Button>
@@ -130,87 +198,3 @@ function EditModal({ setUsers, user }) {
 }
 
 export default EditModal;
-
-// STARTER CODE
-// import {
-// 	Button,
-// 	Flex,
-// 	FormControl,
-// 	FormLabel,
-// 	IconButton,
-// 	Input,
-// 	Modal,
-// 	ModalBody,
-// 	ModalCloseButton,
-// 	ModalContent,
-// 	ModalFooter,
-// 	ModalHeader,
-// 	ModalOverlay,
-// 	Radio,
-// 	RadioGroup,
-// 	Textarea,
-// 	useDisclosure,
-// } from "@chakra-ui/react";
-// import { BiEditAlt } from "react-icons/bi";
-
-// function EditModal({ user }) {
-// 	const { isOpen, onOpen, onClose } = useDisclosure();
-
-// 	return (
-// 		<>
-// 			<IconButton
-// 				onClick={onOpen}
-// 				variant='ghost'
-// 				colorScheme='blue'
-// 				aria-label='See menu'
-// 				size={"sm"}
-// 				icon={<BiEditAlt size={20} />}
-// 			/>
-
-// 			<Modal isOpen={isOpen} onClose={onClose}>
-// 				<ModalOverlay />
-// 				<ModalContent>
-// 					<ModalHeader>My new BFF 😍</ModalHeader>
-// 					<ModalCloseButton />
-// 					<ModalBody pb={6}>
-// 						<Flex alignItems={"center"} gap={4}>
-// 							<FormControl>
-// 								<FormLabel>Full Name</FormLabel>
-// 								<Input placeholder='John Doe' />
-// 							</FormControl>
-
-// 							<FormControl>
-// 								<FormLabel>Role</FormLabel>
-// 								<Input placeholder='Software Engineer' />
-// 							</FormControl>
-// 						</Flex>
-// 						<FormControl mt={4}>
-// 							<FormLabel>Description</FormLabel>
-// 							<Textarea
-// 								resize={"none"}
-// 								overflowY={"hidden"}
-// 								placeholder="He's a software engineer who loves to code and build things.
-//               "
-// 							/>
-// 						</FormControl>
-// 						<RadioGroup defaultValue='male' mt={4}>
-// 							<Flex gap={5}>
-// 								<Radio value='male'>Male</Radio>
-// 								<Radio value='female'>Female</Radio>
-// 							</Flex>
-// 						</RadioGroup>
-// 					</ModalBody>
-
-// 					<ModalFooter>
-// 						<Button colorScheme='blue' mr={3}>
-// 							Add
-// 						</Button>
-// 						<Button onClick={onClose}>Cancel</Button>
-// 					</ModalFooter>
-// 				</ModalContent>
-// 			</Modal>
-// 		</>
-// 	);
-// }
-
-// export default EditModal;

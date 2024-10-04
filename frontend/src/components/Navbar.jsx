@@ -19,14 +19,11 @@ const Navbar = ({ setUsers }) => {
 						<img src='/react.png' alt='React logo' width={50} height={50} />
 						<Text fontSize={"40px"}>+</Text>
 						<img src='/python.png' alt='Python logo' width={50} height={40} />
-						<Text fontSize={"40px"}>=</Text>
-
-						<img src='/explode.png' alt='Explode head' width={45} height={45} />
 					</Flex>
 					{/* Right side */}
 					<Flex gap={3} alignItems={"center"}>
 						<Text fontSize={"lg"} fontWeight={500} display={{ base: "none", md: "block" }}>
-							BFFship 🔥
+							Contact my Friend
 						</Text>
 
 						<Button onClick={toggleColorMode}>
